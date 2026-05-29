@@ -123,10 +123,26 @@ buttons.forEach(button => {
                     num2 += value
                 }
                 updateDisplay();
-                
         }
-
         console.table(num1, num2, operator, result);
         console.log(e.target.textContent)
     })
+})
+
+document.addEventListener("keydown", (e) => {
+    const keyMap = {
+        "0": "0", "1": "1", "2": "2", "3": "3", "4": "4",
+        "5": "5", "6": "6", "7": "7", "8": "8", "9": "9",
+        "+": "+", "-": "-", "*": "×", "/": "÷",
+        "Enter": "=", "Backspace": "⌫", "Escape": "AC", "%": "%"
+    }
+
+    const mappedValue = keyMap[e.key];
+    if (mappedValue) {
+        const button = Array.from(buttons).find(btn => btn.textContent === mappedValue);
+        if (button) {
+            button.click();
+        }
+    }   
+    
 })
