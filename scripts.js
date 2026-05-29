@@ -20,6 +20,20 @@ function resetAll() {
     display.textContent = "0"
 }
 
+function updateDisplay() {
+  if (result != null) {
+    display.textContent = result;
+  } else if (num2 != null) {
+    display.textContent = `${num1}${operator}${num2}`;
+  } else if (operator != null) {
+    display.textContent = `${num1}${operator}`;
+  } else if (num1 != null) {
+    display.textContent = num1;
+  } else {
+    display.textContent = "0";
+  }
+}
+
 buttons.forEach(button => {
 
     button.addEventListener("click", (e) => {
@@ -31,35 +45,40 @@ buttons.forEach(button => {
             case "-":
             case "×":
             case "÷":
-                if (num2 != null && result == null) {
-                    display.textContent = operations[operator](num1, num2);
-                }
                 if (num1 != null && num2 == null) {
                     operator = value;
-                    let newNumber = display.textContent.slice(0,-1);
-                    display.textContent = newNumber;
+                } else if (num1 != null && num2 != null && result == null) {
+                    result = operations[operator](num1, num2);
+                    num1 = result;
+                    num2 = null;
+                    result = null;
+                    operator = value;
+                } else if (num1 != null && num2 != null && result != null) {
+                    num1 = result;
+                    num2 = null;
+                    operator = value;
+                    result = null;
                 }
-                operator = value;
-                num1 = Number(display.textContent);
-                display.textContent += value;
+                updateDisplay();
                 break;
 
             case "%":
-                display.textContent = Number(display.textContent) / 100;
+                if (num1 != null && num2 == null) {
+                    num1 = String(Number(num1) / 100);
+                } else if (num1 != null && num2 != null) {
+                    num2 = String(Number(num2) / 100);
+                }
+                updateDisplay();
                 break;
 
             case "=":
                 if (result != null) {
-                    num2 = result
+                    num1 = result;
                     result = operations[operator](num1, num2);
-                    display.textContent = result; 
                 } else {
-                    const parts = display.textContent.split(operator);
-                    num1 = Number(parts[0]);
-                    num2 = Number(parts[1]);
                     result = operations[operator](num1, num2);
-                    display.textContent = result;
                 }
+                updateDisplay();
                 break;
 
             case "AC":
@@ -67,30 +86,44 @@ buttons.forEach(button => {
                 break;
 
             case "⌫":
-                let newNumber = display.textContent.slice(0,-1);
-                display.textContent = newNumber;
+                if (result != null) {
+                    result = String(result).slice(0, -1);
+                } else if (num2 != null) {
+                    num2 = num2.slice(0, -1);
+                } else if (operator != null) {
+                    operator = null;
+                } else if (num1 != null) {
+                    num1 = num1.slice(0, -1);
+                }
+                updateDisplay();
                 break;
 
             case "±":
-                display.textContent = Number(display.textContent) * Number(-1);
+                if (num2 != null) {
+                    num2 = String(Number(num2) * -1);
+                } else if (num1 != null) {
+                    num1 = String(Number(num1) * -1);
+                }
+                updateDisplay();
                 break;
             
             default:
                 if (result != null) {
-                    resetAll()
+                    num1 = value;
+                    num2 = null;
+                    operator = null;
+                    result = null;
+                }else if (num1 == null) {
+                    num1 = value
+                }else if (operator == null) {
+                    num1 += value
+                }else if (num2 == null) {
+                    num2 = value
+                }else {
+                    num2 += value
                 }
-                if (num2 != null) {
-                    num1 = Number(e.target.textContent)
-                    result = null
-                    display.textContent = ""
-                } else if (num1 != null) {
-                    num2 = Number(e.target.textContent)
-                }
-                if (display.textContent === "0" || display.textContent == result) {
-                    display.textContent = value  // replace the lone zero
-                } else {
-                    display.textContent += value // otherwise append
-                };
+                updateDisplay();
+                
         }
 
         console.table(num1, num2, operator, result);
