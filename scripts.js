@@ -114,12 +114,14 @@ buttons.forEach(button => {
                     operator = null;
                     result = null;
                 }else if (num1 == null) {
-                    num1 = value
+                    num1 = value === "." ? "0." : value;
                 }else if (operator == null) {
+                    if (value === "." && num1.includes(".")) break;
                     num1 += value
                 }else if (num2 == null) {
                     num2 = value
                 }else {
+                    if (value === "." && num2.includes(".")) break;
                     num2 += value
                 }
                 updateDisplay();
@@ -133,7 +135,7 @@ document.addEventListener("keydown", (e) => {
     const keyMap = {
         "0": "0", "1": "1", "2": "2", "3": "3", "4": "4",
         "5": "5", "6": "6", "7": "7", "8": "8", "9": "9",
-        "+": "+", "-": "-", "*": "×", "/": "÷",
+        "+": "+", "-": "-", "*": "×", "/": "÷", ".": ".",
         "Enter": "=", "Backspace": "⌫", "Escape": "AC", "%": "%"
     }
 
