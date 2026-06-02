@@ -100,6 +100,7 @@ buttons.forEach(button => {
                 } else if (num1 != null) {
                     num1 = num1.slice(0, -1);
                 }
+                if (num1.length === 0) num1 = null;
                 updateDisplay();
                 break;
 
@@ -118,16 +119,24 @@ buttons.forEach(button => {
                     num2 = null;
                     operator = null;
                     result = null;
-                }else if (num1 == null) {
+                } else if (num1 == null) {
                     num1 = value === "." ? "0." : value;
-                }else if (operator == null) {
+                } else if (operator == null) {
                     if (value === "." && num1.includes(".")) break;
-                    num1 += value
-                }else if (num2 == null) {
+                    if (num1 === "0" && value !== ".") {
+                        num1 = value;
+                    } else {
+                        num1 += value;
+                    }
+                } else if (num2 == null) {
                     num2 = value
-                }else {
-                    if (value === "." && num2.includes(".")) break;
-                    num2 += value
+                } else {
+                    if (value === "." && num2.includes(".")) break; //keeps from adding more than one decimal point
+                    if (num2 === "0" && value !== ".") {
+                        num2 = value;
+                    } else {
+                        num2 += value;
+                    }
                 }
                 updateDisplay();
         }
