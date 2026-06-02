@@ -76,6 +76,7 @@ buttons.forEach(button => {
                 break;
 
             case "=":
+                if (num1 == null || operator == null || num2 == null) break;    
                 if (result != null) {
                     num1 = result;
                     result = operations[operator](num1, num2);
