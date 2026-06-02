@@ -65,7 +65,9 @@ buttons.forEach(button => {
                 break;
 
             case "%":
-                if (num1 != null && num2 == null) {
+                if (result != null) {                    
+                    result = String(Number(result) / 100);
+                } else if (num1 != null && num2 == null) {
                     num1 = String(Number(num1) / 100);
                 } else if (num1 != null && num2 != null) {
                     num2 = String(Number(num2) / 100);
