@@ -21,7 +21,9 @@ function resetAll() {
 }
 
 function updateDisplay() {
-  if (result != null) {
+  if (result == "Infinity" || result == "NaN") {
+    display.textContent = "Error";
+  } else if (result != null) {
     display.textContent = result;
   } else if (num2 != null) {
     display.textContent = `${num1}${operator}${num2}`;
